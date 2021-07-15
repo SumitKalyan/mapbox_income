@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+ <meta charset='utf-8' />
+ <!--Link to all external resources needed including your own external .css file -->
+ <script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+ <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+ <link rel="stylesheet" type="text/css" href="style.css">
+
+ <!-- Add a title to your web page - and your Student name and ID -->
+ <title> Student ID: S3826739 </title>
+
+</head>
+
+<body>
+
+<!--Initiate you map and any other html elements here -->
+<div id='map'></div>
+<div class='map-overlay' id='features'><h2>Income Per Capita Spatial Distribution Across Australia</h2>
+
+</div>
+
+<div class='map-overlay' id='legend'>
+  <h3>Per capita income</h3>
+</div>
+
+<!-- All the Mapbox GL JS syntax goes inside the script tag for loading the map or interacting with it -->
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoic3VtaXRrYWx5YW4iLCJhIjoiY2tnMjMyNGpnMDUwaDJxbWx0djVvZTNtaCJ9.W6IuyRi0eHEkO0MMA79J8A';
+
+var map = new mapboxgl.Map({
+  container: 'map', // container id
+  style: 'mapbox://styles/sumitkalyan/ckozmoio13g8218n10biwwe66' // replace this with your style URL
+});
+
+map.on('load', function() {
+  // the rest of the code will go in here
+});
+
+var layers = ['0 - 47K', '> 52K', '> 57K', '> 66K', '66K - 228K'];
+var colors = ['#80c65d', '#4d8e2e', '#41712d', '#356321', '#184701'];
+
+for (i = 0; i < layers.length; i++) {
+  var layer = layers[i];
+  var color = colors[i];
+  var item = document.createElement('div');
+  var key = document.createElement('span');
+  key.className = 'legend-key';
+  key.style.backgroundColor = color;
+
+  var value = document.createElement('span');
+  value.innerHTML = layer;
+  item.appendChild(key);
+  item.appendChild(value);
+  legend.appendChild(item);
+}
+
+map.on('mousemove', function(e) {
+  var states = map.queryRenderedFeatures(e.point, {
+    layers: ['statedata']
+  });
+
+  if (states.length > 0) {
+    document.getElementById('pd').innerHTML = '<h3><strong>' + states[0].properties.name + '</strong></h3><p><strong><em>' + states[0].properties.density + '</strong> people per square mile</em></p>';
+  } else {
+    document.getElementById('pd').innerHTML = '<p>Hover over a state!</p>';
+  }
+});
+
+map.getCanvas().style.cursor = 'default';
+
+</script>
+
+</body>
+
+</html>
+
